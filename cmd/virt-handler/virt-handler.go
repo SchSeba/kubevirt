@@ -203,7 +203,7 @@ func main() {
 		app.Run()
 	}
 
-	err := bridge.CreateBridge(podNamespaces, hostNamespaces, nodeBridgeName, bridgeName, networkName, interfaceIndex)
+	err := bridgecreate.CreateBridge(podNamespaces, hostNamespaces, nodeBridgeName, bridgeName, networkName, interfaceIndex)
 	if err != nil {
 		panic(err)
 	}

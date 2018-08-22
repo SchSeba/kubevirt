@@ -38,7 +38,7 @@ import (
 	"kubevirt.io/kubevirt/tests"
 )
 
-var _ = Describe("Bridge", func() {
+var _ = FDescribe("Bridge", func() {
 
 	bridgeIP := map[string]string{"red": "172.16.98.1", "blue": "172.16.99.1"}
 
