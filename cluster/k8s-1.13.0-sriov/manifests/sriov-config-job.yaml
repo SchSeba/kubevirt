@@ -1,0 +1,28 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: sriov-config-job
+  namespace: kube-system
+spec:
+  backoffLimit: 2
+  activeDeadlineSeconds: 100
+  template:
+    spec:
+      hostNetwork: true
+      containers:
+      - name: sriov-config
+        image: sebassch/sriov-config
+        securityContext:
+          privileged: true
+        env:
+          - name: SRIOV_IFC_NAME
+            value: I350
+        volumeMounts:
+          - name: pcidp
+            mountPath: /host/etc/pcidp/
+            readOnly: false
+      restartPolicy: Never
+      volumes:
+        - name: pcidp
+          hostPath:
+            path: /etc/pcidp/
