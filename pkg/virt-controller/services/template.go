@@ -765,6 +765,11 @@ func (t *templateService) RenderLaunchManifest(vmi *v1.VirtualMachineInstance) (
 	annotationsList := map[string]string{
 		v1.DomainAnnotation: domain,
 	}
+	if vmi.Annotations != nil {
+		for k,v := range vmi.Annotations {
+			annotationsList[k] = v
+		}
+	}
 
 	cniNetworks, cniAnnotation := getCniInterfaceList(vmi)
 	if len(cniNetworks) > 0 {
