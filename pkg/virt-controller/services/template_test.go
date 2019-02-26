@@ -102,15 +102,14 @@ var _ = Describe("Template", func() {
 				pod, err := svc.RenderLaunchManifest(&v1.VirtualMachineInstance{ObjectMeta: metav1.ObjectMeta{Name: "testvmi", Namespace: "testns", UID: "1234", Annotations: annotations}, Spec: v1.VirtualMachineInstanceSpec{Domain: v1.DomainSpec{}}})
 				Expect(err).ToNot(HaveOccurred())
 
+				annotations[v1.DomainAnnotation] = "testvmi"
 				Expect(len(pod.Spec.Containers)).To(Equal(2))
 				Expect(pod.Spec.Containers[0].Image).To(Equal("kubevirt/virt-launcher"))
 				Expect(pod.ObjectMeta.Labels).To(Equal(map[string]string{
 					v1.AppLabel:       "virt-launcher",
 					v1.CreatedByLabel: "1234",
 				}))
-				Expect(pod.ObjectMeta.Annotations).To(Equal(map[string]string{
-					v1.DomainAnnotation: "testvmi",
-				}))
+				Expect(pod.ObjectMeta.Annotations).To(Equal(annotations))
 				Expect(pod.ObjectMeta.OwnerReferences).To(Equal([]metav1.OwnerReference{{
 					APIVersion:         v1.VirtualMachineInstanceGroupVersionKind.GroupVersion().String(),
 					Kind:               v1.VirtualMachineInstanceGroupVersionKind.Kind,
