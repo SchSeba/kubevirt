@@ -83,6 +83,7 @@ type NetworkHandler interface {
 	StartDHCP(nic *VIF, serverAddr *netlink.Addr, bridgeInterfaceName string, dhcpOptions *v1.DHCPOptions)
 	IptablesNewChain(table, chain string) error
 	IptablesAppendRule(table, chain string, rulespec ...string) error
+	UpdateBridgeForwardGroupMask(brName string) error
 }
 
 type NetworkUtilsHandler struct{}
@@ -252,6 +253,12 @@ func (h *NetworkUtilsHandler) GenerateRandomMac() (net.HardwareAddr, error) {
 		return nil, err
 	}
 	return net.HardwareAddr(append(prefix, suffix...)), nil
+}
+
+func (h *NetworkUtilsHandler) UpdateBridgeForwardGroupMask(brName string) error {
+	groupForwardMask := []byte("65528")
+	err := ioutil.WriteFile(fmt.Sprintf("/sys/class/net/%s/bridge/group_fwd_mask", brName), groupForwardMask, 0644)
+	return err
 }
 
 // Allow mocking for tests

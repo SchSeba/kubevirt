@@ -341,6 +341,11 @@ func (b *BridgePodInterface) createBridge() error {
 		return err
 	}
 
+	if err := Handler.UpdateBridgeForwardGroupMask(b.bridgeInterfaceName); err != nil {
+		log.Log.Reason(err).Errorf("failed to set forward group mask for bridge %s", b.bridgeInterfaceName)
+		return err
+	}
+
 	return nil
 }
 
